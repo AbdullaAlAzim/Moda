@@ -1,0 +1,96 @@
+<?php
+/**
+ * The template for displaying product content within loops
+ *
+ * This template can be overridden by copying it to yourtheme/woocommerce/content-product.php.
+ *
+ * HOWEVER, on occasion WooCommerce will need to update template files and you
+ * (the theme developer) will need to copy the new files to your theme to
+ * maintain compatibility. We try to do this as little as possible, but it does
+ * happen. When this occurs the version of the template file will be bumped and
+ * the readme will list any important changes.
+ *
+ * @see     https://docs.woocommerce.com/document/template-structure/
+ * @package WooCommerce\Templates
+ * @version 3.6.0
+ */
+
+defined('ABSPATH') || exit;
+
+global $product;
+
+// Ensure visibility.
+if (empty($product) || !$product->is_visible()) {
+    return;
+}
+$column = wc_get_loop_prop('columns');
+?>
+
+<div <?php wc_product_class("col-lg-$column col-6", $product); ?>>
+    <div class="moda-product-card-items">
+        <div class="product-card">
+            <div class="product-images">
+                <a href="<?php the_permalink(); ?>" class="moda-hover-thumb-woo">
+                    <?php
+                    /**
+                     *
+                     * @hooked moda_woo_thumbnail - 11
+                     */
+                    do_action('moda_woocommerce_shop_loop_images');
+                    ?>
+                </a>
+                <div class="product-save"><span><?php echo moda_discount_badge(); ?></span></div>
+                <div class="product-action">
+                    <?php woocommerce_template_loop_add_to_cart(); ?>
+                    <?php moda_wishlist_button(); ?>
+                    <?php moda_compare_icon_only_product_card(); ?>
+                </div>
+            </div>
+            <div class="product-title">
+                <span class="categories"><?php echo moda_product_category(); ?></span>
+                <?php echo moda_get_product_review(); ?>
+                <a href="<?php the_permalink(); ?>" class="title"><?php the_title(); ?></a>
+                <?php woocommerce_template_loop_price(); ?>
+            </div>
+            <?php
+            /**
+             * Hook: woocommerce_before_shop_loop_item.
+             *
+             * @hooked woocommerce_template_loop_product_link_open - 10
+             */
+            do_action('woocommerce_before_shop_loop_item');
+
+            /**
+             * Hook: woocommerce_before_shop_loop_item_title.
+             *
+             * @hooked woocommerce_show_product_loop_sale_flash - 10
+             * @hooked woocommerce_template_loop_product_thumbnail - 10
+             */
+            do_action('woocommerce_before_shop_loop_item_title');
+
+            /**
+             * Hook: woocommerce_shop_loop_item_title.
+             *
+             * @hooked woocommerce_template_loop_product_title - 10
+             */
+            do_action('woocommerce_shop_loop_item_title');
+
+            /**
+             * Hook: woocommerce_after_shop_loop_item_title.
+             *
+             * @hooked woocommerce_template_loop_rating - 5
+             * @hooked woocommerce_template_loop_price - 10
+             */
+            do_action('woocommerce_after_shop_loop_item_title');
+
+            /**
+             * Hook: woocommerce_after_shop_loop_item.
+             *
+             * @hooked woocommerce_template_loop_product_link_close - 5
+             * @hooked woocommerce_template_loop_add_to_cart - 10
+             */
+            do_action('woocommerce_after_shop_loop_item');
+            ?>
+        </div>
+    </div>
+</div>
